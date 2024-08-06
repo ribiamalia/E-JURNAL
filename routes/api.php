@@ -53,7 +53,9 @@ Route::prefix('admin')->group(function () {
 
         Route::apiResource('/sekolah', \App\Http\Controllers\Api\Admin\SchoolController::class)
         ->middleware('permission:school.index');
+        Route::apiResource('/timeline', \App\Http\Controllers\Api\Admin\TimelineController::class)
+        ->middleware('permission:users.index');
 
-
+       
     });
 });
