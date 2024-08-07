@@ -76,6 +76,11 @@ class User extends Authenticatable implements JWTSubject
 
         return $this->hasMany(Timeline::class);
     }
+    public function jurnals()
+    {
+
+        return $this->hasOne(Jurnal::class);
+    }
 
     protected function image(): Attribute
      {

@@ -45,16 +45,24 @@ Route::prefix('admin')->group(function () {
         Route::get('/roles/all', [\App\Http\Controllers\Api\Admin\RoleController::class, 'all'])
         ->middleware('permission:roles.index');
 
+        Route::post('/image/{id}', [\App\Http\Controllers\Api\Admin\UserController::class, 'updateDokumen']);
+
         //roles
         Route::apiResource('/roles', \App\Http\Controllers\Api\Admin\RoleController::class)
         ->middleware('permission:roles.index|roles.store|roles.update|roles.delete');
+
         Route::apiResource('/users', \App\Http\Controllers\Api\Admin\UserController::class)
         ->middleware('permission:users.index');
 
         Route::apiResource('/sekolah', \App\Http\Controllers\Api\Admin\SchoolController::class)
         ->middleware('permission:school.index');
-        Route::apiResource('/timeline', \App\Http\Controllers\Api\Admin\TimelineController::class)
-        ->middleware('permission:users.index');
+
+        Route::apiResource('/timeline', \App\Http\Controllers\Api\Admin\TimelineController::class);
+        Route::apiResource('/jurnal', \App\Http\Controllers\Api\Admin\JurnalController::class);
+        Route::post('/dokumenjurnal/{id}', [\App\Http\Controllers\Api\Admin\JurnalController::class, 'updateDokumen']);
+
+        Route::apiResource('/blog', \App\Http\Controllers\Api\Admin\BlogController::class);
+        Route::post('/dokumenblog/{id}', [\App\Http\Controllers\Api\Admin\BlogController::class, 'updateDokumen']);
 
        
     });

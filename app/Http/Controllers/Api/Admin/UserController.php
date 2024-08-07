@@ -133,7 +133,7 @@ class UserController extends Controller
             'email'     => 'required|unique:users,email,'.$user->id,
             'password'  => 'confirmed',
             'nomor_induk' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
           'jurusan'=> 'required',
            'kelas' => 'required',
            'school_id' => 'required|exists:schools,id',

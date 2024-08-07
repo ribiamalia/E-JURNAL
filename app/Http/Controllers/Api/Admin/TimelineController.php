@@ -76,6 +76,71 @@ public function index()
     ]);
 }
 
+public function update(Request $request, $id)
+{
+    // Validasi data yang diterima
+    $validator = Validator::make($request->all(), [
+        'name'        => 'required',
+        'user_id'     => 'required|exists:users,id',
+        'tanggal'     => 'required|date',
+        'start_time'  => 'required|date_format:H:i:s',
+        'end_time'    => 'required|date_format:H:i:s'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
+    }
+
+    // Cari entri Timeline berdasarkan ID
+    $timeline = Timeline::find($id);
+
+    // Cek apakah entri ditemukan
+    if (!$timeline) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Data Timeline tidak ditemukan'
+        ], 404);
+    }
+
+    // Perbarui entri Timeline dengan data baru
+    $timeline->update([
+        'name'       => $request->name,
+        'user_id'    => $request->user_id,
+        'tanggal'    => $request->tanggal,
+        'start_time' => $request->start_time,
+        'end_time'   => $request->end_time
+    ]);
+
+    // Kembalikan respons sukses
+    return new TimelineResource(true, 'Data Timeline berhasil diperbarui', $timeline);
+}
+
+public function destroy(Timeline $timeline)
+    {
+        if($timeline->delete()) {
+            //return success with Api resource
+            return new TimelineResource(true, 'Timeline Berhasil Dihapus!', null);
+        }
+
+        //return failed with Api Resource
+        return new TimelineResource(false, 'Timeline Gagal Dihapus!', null);
+    }
+
+    public function show($id)
+    {
+        $timeline = Timeline::find($id);
+
+        if($timeline) {
+            //return succes with Api Resource
+            return new TimelineResource(true, 'Detail Timeline!', $timeline);
+        }
+
+        //return failed with Api Resource
+        return new TimelineResource(false, 'Timeline Tidak Ditemukan!', null);
+    }
+
+
+
 
 
 }
