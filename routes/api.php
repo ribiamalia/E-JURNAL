@@ -48,6 +48,7 @@ Route::prefix('admin')->group(function () {
         ->middleware('permission:roles.index');
 
         Route::post('/image/{id}', [\App\Http\Controllers\Api\Admin\UserController::class, 'updateDokumen']);
+        Route::get('/indexbydate', [\App\Http\Controllers\Api\Admin\TimelineController::class, 'indexbyDate']);
 
         //roles
         Route::apiResource('/roles', \App\Http\Controllers\Api\Admin\RoleController::class)

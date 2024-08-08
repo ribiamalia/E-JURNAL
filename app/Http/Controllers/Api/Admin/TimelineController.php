@@ -43,6 +43,44 @@ class TimelineController extends Controller
     return new TimelineResource(false, 'Data Timeline gagal ditambahkan', null);
 }
 
+public function indexbyDate()
+{
+    // Ambil data dan group berdasarkan 'tanggal' dan 'user_id'
+    $timelines = Timeline::with('users') // Memuat relasi user
+        ->get()
+        ->groupBy(['tanggal', 'user_id']);
+
+    // Mengubah data ke dalam format yang diinginkan
+    $data = $timelines->map(function($timelinesByUser, $tanggal) {
+        return [
+            'tanggal' => $tanggal,
+            'users' => $timelinesByUser->map(function($timelines, $userId) {
+                return [
+                    'user_id' => $userId,
+                    'timelines' => $timelines->map(function($timeline) {
+                        return [
+                            'id' => $timeline->id,
+                            'name' => $timeline->name,
+                            'start_time' => $timeline->start_time,
+                            'end_time' => $timeline->end_time,
+                            'created_at' => $timeline->created_at,
+                            'updated_at' => $timeline->updated_at
+                        ];
+                    })
+                ];
+            })->values()
+        ];
+    })->values();
+
+    // Return response
+    return response()->json([
+        'success' => true,
+        'message' => 'Data Timeline berhasil diambil',
+        'data'    => $data
+    ]);
+}
+
+
 public function index()
 {
     // Ambil data dengan mengelompokkan berdasarkan 'user_id'
