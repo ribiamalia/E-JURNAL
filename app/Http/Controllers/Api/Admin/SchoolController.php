@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\School;
 use App\Http\Resources\SchoolResource;
 use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 
 class SchoolController extends Controller
 {
@@ -136,19 +137,22 @@ class SchoolController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        // Find IdentitasSekolah by ID
-        $identitassekolah = School::findOrFail($id);
+{
+    // Find IdentitasSekolah by ID
+    $identitassekolah = School::findOrFail($id);
 
-        // Delete IdentitasSekolah
-        if($identitassekolah->delete()) {
-            // Return success with Api Resource
-            return new SchoolResource(true, 'Identitas Sekolah Berhasil di Hapus!', null);
-        }
+    // Delete associated users
+    User::where('school_id', $identitassekolah->id)->delete();
 
-        // Return failed with Api Resource
-        return new SchoolResource(false, 'Identitas Sekolah Gagal di Hapus!', null);
+    // Delete IdentitasSekolah
+    if($identitassekolah->delete()) {
+        // Return success with Api Resource
+        return new SchoolResource(true, 'Identitas Sekolah Berhasil di Hapus!', null);
     }
+
+    // Return failed with Api Resource
+    return new SchoolResource(false, 'Identitas Sekolah Gagal di Hapus!', null);
+}
 
     /**
      * All
