@@ -40,11 +40,13 @@ class LoginController extends Controller
             ], 400);
         }
 
+        $roles = auth()->guard('api')->user()->roles->pluck('name')->implode(',');
+
         // Return success response with token and user details
         return response()->json([
             'success'       => true,
             'user'          => auth()->guard('api')->user()->only(['name','email']),
-            'roles'         => auth()->guard('api')->user()->roles->pluck('name'),
+            'roles'         => $roles,
             'permissions'   => auth()->guard('api')->user()->getAllPermissions()->pluck('name'),
             'token'         => $token
         ], 200);
