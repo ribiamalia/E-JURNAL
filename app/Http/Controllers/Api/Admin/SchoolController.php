@@ -141,8 +141,8 @@ class SchoolController extends Controller
     // Find IdentitasSekolah by ID
     $identitassekolah = School::findOrFail($id);
 
-    // Delete associated users
-    User::where('school_id', $identitassekolah->id)->delete();
+    // Set school_id to null for associated users
+    User::where('school_id', $identitassekolah->id)->update(['school_id' => null]);
 
     // Delete IdentitasSekolah
     if($identitassekolah->delete()) {
@@ -153,6 +153,7 @@ class SchoolController extends Controller
     // Return failed with Api Resource
     return new SchoolResource(false, 'Identitas Sekolah Gagal di Hapus!', null);
 }
+
 
     /**
      * All
