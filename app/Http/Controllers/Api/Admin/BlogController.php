@@ -136,7 +136,7 @@ class BlogController extends Controller
             // Jika ada parameter pencarian (search) di URL
             // Maka tambahkan kondisi WHERE untuk mencari academic programs berdasarkan nama
             $query->where('judul', 'like', '%' . request()->search . '%');
-        })->oldest() // Mengurutkan academic programs dari yang terbaru
+        })->with('users')->oldest() // Mengurutkan academic programs dari yang terbaru
         ->paginate(5); // Membuat paginasi dengan 5 item per halaman
 
         // Menambahkan parameter pencarian ke URL pada hasil paginasi

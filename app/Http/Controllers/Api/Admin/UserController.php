@@ -82,6 +82,7 @@ class UserController extends Controller
           'nama_ortu' => 'required',
           'alamat_ortu'=> 'required',
             'no_hp_ortu'=> 'required',
+            'no_hp'=> 'required',
         ]);
 
         if ($validator->fails()) {
@@ -106,6 +107,7 @@ class UserController extends Controller
             'nama_ortu' => $request->nama_ortu,
             'alamat_ortu' => $request->alamat_ortu,
               'no_hp_ortu' => $request->no_hp_ortu,
+              'no_hp' => $request->no_hp,
               'image'   => $image,
             
         ]);
@@ -168,6 +170,7 @@ class UserController extends Controller
           'nama_ortu' => 'required',
           'alamat_ortu'=> 'required',
             'no_hp_ortu'=> 'required',
+            'no_hp'=> 'required',
         ]);
 
         if ($validator->fails()) {
@@ -189,6 +192,7 @@ class UserController extends Controller
             'nama_ortu' => $request->nama_ortu,
             'alamat_ortu' => $request->alamat_ortu,
               'no_hp_ortu' => $request->no_hp_ortu,
+              'no_hp' => $request->no_hp,
               
             ]);
 
