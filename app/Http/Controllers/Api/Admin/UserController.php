@@ -133,7 +133,6 @@ class UserController extends Controller
             'email'     => 'required|unique:users,email,'.$user->id,
             'password'  => 'confirmed',
             'nomor_induk' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
           'jurusan'=> 'required',
            'kelas' => 'required',
            'school_id' => 'required|exists:schools,id',
@@ -224,10 +223,10 @@ class UserController extends Controller
     }
     $user->save();
 
-    Log::info('Updated Submission Document:', $user->toArray());
+    Log::info('Updated Image:', $user->toArray());
 
     // Return success response
-    return response()->json(['success' => true, 'message' => 'Dokumen submission berhasil diperbarui!', 'data' => $user], 200);
+    return response()->json(['success' => true, 'message' => 'Foto berhasil diperbarui!', 'data' => $user], 200);
 
 
     }
@@ -238,15 +237,22 @@ class UserController extends Controller
      * @param   int $id
      * @return \Illuminateg\Http\Response
      */
-    public function destroy(User $user)
-    {
-        if($user->delete()) {
-            //return success with Api resource
-            return new UserResource(true, 'Data User Berhasil Dihapus!', null);
-        }
-
-        //return failed with Api Resource
-        return new UserResource(false, 'Data User Gagal Dihapus!', null);
-    }
+    
+     public function destroy(User $user)
+     {
+         // Cek apakah user memiliki gambar, jika ada, hapus dari storage
+         if ($user->image) {
+             Storage::disk('public')->delete($user->image);
+         }
+         
+         // Hapus user
+         if($user->delete()) {
+             //return success with Api resource
+             return new UserResource(true, 'Data User Berhasil Dihapus!', null);
+         }
+     
+         //return failed with Api Resource
+         return new UserResource(false, 'Data User Gagal Dihapus!', null);
+     }
 
 }
