@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Role;
 
 
 class UserController extends Controller
@@ -30,6 +31,32 @@ class UserController extends Controller
 
         //return with Api Resource
         return new UserResource(true, 'List Data Users', $users);
+    }
+    
+    public function getUsersByRole($roleId)
+    {
+        // Cek apakah peran dengan ID tertentu ada
+        $role = Role::find($roleId);
+    
+        if (!$role) {
+            return new UserResource(false, 'Role not found', null);
+        }
+    
+        // Ambil pengguna berdasarkan peran
+        $users = User::role($role->name)->with('schools');
+    
+        // Filter pengguna berdasarkan kueri pencarian
+        $users = $users->when(request()->search, function ($query) {
+            return $query->where('name', 'like', '%' . request()->search . '%');
+        });
+    
+        // Paginasi hasil
+        $users = $users->with('roles')->oldest()->paginate(10);
+    
+        // Menambahkan parameter pencarian ke tautan paginasi
+        $users->appends(['search' => request()->search]);
+    
+        return new UserResource(true, 'Daftar Data Pengguna', $users);
     }
 
     /**

@@ -55,7 +55,10 @@ Route::prefix('admin')->group(function () {
 
         Route::apiResource('/users', \App\Http\Controllers\Api\Admin\UserController::class)
         ->middleware('permission:users.index');
+        Route::post('/role', [\App\Http\Controllers\Api\Admin\UserController::class, 'userByRole']);
 
+        Route::get('users/role/{roleId}', [\App\Http\Controllers\Api\Admin\UserController::class, 'getUsersByRole']);
+      
         Route::apiResource('/sekolah', \App\Http\Controllers\Api\Admin\SchoolController::class)
         ->middleware('permission:school.index');
 
