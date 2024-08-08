@@ -23,7 +23,7 @@ class UserController extends Controller
         //get users
         $users = User::when(request()->search, function($users) {
             $users = $users->where('name', 'like', '%'. request()->search . '%');
-        })->with('roles')->latest()->paginate(5);
+        })->with('roles')->with('schools')->latest()->paginate(5);
 
         //append query string to pagination links
         $users->appends(['search' => request()->search]);
