@@ -64,8 +64,10 @@ Route::prefix('admin')->group(function () {
         ->middleware('permission:school.index');
 
         Route::apiResource('/timeline', \App\Http\Controllers\Api\Admin\TimelineController::class);
+
         Route::apiResource('/jurnal', \App\Http\Controllers\Api\Admin\JurnalController::class);
         Route::post('/dokumenjurnal/{id}', [\App\Http\Controllers\Api\Admin\JurnalController::class, 'updateDokumen']);
+        Route::get('/timelinebyDate', [\App\Http\Controllers\Api\Admin\TimelineController::class, 'indexbyDate']);
 
         Route::apiResource('/blog', \App\Http\Controllers\Api\Admin\BlogController::class);
         Route::post('/dokumenblog/{id}', [\App\Http\Controllers\Api\Admin\BlogController::class, 'updateDokumen']);

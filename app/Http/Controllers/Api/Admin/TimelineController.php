@@ -83,11 +83,8 @@ public function indexbyDate()
 
 public function index()
 {
-    // Ambil data dengan mengelompokkan berdasarkan 'user_id'
-    $timelines = Timeline::select('user_id')
-        ->with('users') // Jika ingin memuat relasi user, bisa ditambahkan
-        ->get()
-        ->groupBy('user_id');
+    // Ambil semua data dari tabel 'timelines' dan muat relasi 'user'
+    $timelines = Timeline::with('users')->get()->groupBy('user_id');
 
     // Mengubah data ke dalam format yang diinginkan
     $data = $timelines->map(function($groupedTimelines, $userId) {
@@ -106,13 +103,15 @@ public function index()
             })
         ];
     });
+
     // Return response
     return response()->json([
         'success' => true,
         'message' => 'Data Timeline berhasil diambil',
-        'data'    => $data
+        'data'    => $data->values() // Menggunakan values() untuk mereset kunci array agar tidak ada masalah saat mengembalikan JSON
     ]);
 }
+
 
 public function update(Request $request, $id)
 {
